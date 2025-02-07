@@ -5,6 +5,8 @@
 package nas_control
 
 import (
+	"fmt"
+
 	"github.com/free5gc/nas"
 	"github.com/free5gc/ngap/ngapType"
 )
@@ -24,16 +26,16 @@ func GetNasPduFromDownlink(msg *ngapType.DownlinkNASTransport) (m *nas.Message) 
 	return nil
 }
 
-func GetNasPduFromPduAccept(dlNas *nas.Message) (m *nas.Message) {
+func GetNasPduFromPduAccept(dlNas *nas.Message) (*nas.Message, error) {
 
 	// get payload container from DL NAS.
 	payload := dlNas.DLNASTransport.GetPayloadContainerContents()
-	m = new(nas.Message)
+	m := new(nas.Message)
 	err := m.PlainNasDecode(&payload)
 	if err != nil {
-		return nil
+		return nil, fmt.Errorf("failed to decode NAS PDU from DL NAS: %s", err)
 	}
-	return
+	return m, nil
 }
 
 func GetNasPduFromDlNas(msg *ngapType.PDUSessionResourceSetupRequest) (m *nas.Message) {

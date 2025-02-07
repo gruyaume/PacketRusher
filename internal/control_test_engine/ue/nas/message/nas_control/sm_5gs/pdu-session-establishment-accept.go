@@ -21,7 +21,10 @@ func DecodeNasPduAccept(ngapMsg *ngapType.NGAPPDU) (*nas.Message, error) {
 	}
 
 	// get NasPdu from Pdu Session establishment accept.
-	nasPduPayload := nas_control.GetNasPduFromPduAccept(nasPdu)
+	nasPduPayload, err := nas_control.GetNasPduFromPduAccept(nasPdu)
+	if err != nil {
+		return nil, fmt.Errorf("Error in get NasPdu from Pdu Session establishment accept message")
+	}
 	if nasPduPayload == nil {
 		return nil, fmt.Errorf("Error in get NasPdu from Pdu Session establishment accept message")
 	}
